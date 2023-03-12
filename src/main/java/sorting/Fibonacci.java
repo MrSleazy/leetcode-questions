@@ -17,13 +17,13 @@ public class Fibonacci {
     int iterationsNormalRecursion = 0;
     int iterationsDynamicRecursion1 = 0;
     int iterationsDynamicRecursion2 = 0;
+    int iterationsDynamicRecursion3 = 0;
 
     int fibonacciRecursion(int n) {
         logger.trace("Calculating for {}", n);
         iterationsNormalRecursion++;
         if (n <= 1) {
             return n;
-
         }
         return fibonacciRecursion(n - 2) + fibonacciRecursion(n - 1);
     }
@@ -37,7 +37,7 @@ public class Fibonacci {
 
         int secondLast = alreadyCalculated.get(n - 2) != null ? alreadyCalculated.get(n - 2) : fibonacciDynamic(n - 2);
         alreadyCalculated.put(n - 2, secondLast);
-        int previous = fibonacciDynamic(n - 1);
+        int previous = alreadyCalculated.get(n - 1) != null ? alreadyCalculated.get(n - 1) : fibonacciDynamic(n - 1);
         alreadyCalculated.put(n - 1, previous);
         return secondLast + previous;
     }
@@ -56,4 +56,19 @@ public class Fibonacci {
         }
         return foundFibonaccis[n];
     }
+
+    int fibonacciDynamic3(int n, Map<Integer, Integer> fibs) {
+        logger.trace("Calculating for {}", n);
+        iterationsDynamicRecursion3++;
+        if (n <= 1) {
+            return n;
+        }
+
+        int secondLast = fibs.get(n - 2) != null ? fibs.get(n - 2) : fibonacciDynamic3(n - 2, fibs);
+        fibs.put(n - 2, secondLast);
+        int previous = fibonacciDynamic3(n - 1, fibs);
+        fibs.put(n - 1, previous);
+        return secondLast + previous;
+    }
+
 }
